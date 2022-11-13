@@ -45,15 +45,15 @@ function [imout,ff] = readimg(fpath, ch, varargin)
     elseif strcmp(fileext,'.yaml')
         sdata = readscan(fpath);
         channels = 1;
-        if ischar(ch) 
-            if strcmp(ch,'all')
-                channels = 1 : numel(sdata.images);
-            elseif ch >= '1' && ch <= num2str(numel(sdata.images))
-                channels = str2num(ch);
-            end
-        elseif isnumeric(ch)
-            channels = max(min(ch, numel(sdata.images)), 1);
-        end
+%         if ischar(ch) 
+%             if strcmp(ch,'all')
+%                 channels = 1 : numel(sdata.images);
+%             elseif ch >= '1' && ch <= num2str(numel(sdata.images))
+%                 channels = str2num(ch);
+%             end
+%         elseif isnumeric(ch)
+%             channels = max(min(ch, numel(sdata.images)), 1);
+%         end
 
         % Get image size
         info = imfinfo(sdata.images(1).path);
@@ -75,7 +75,7 @@ function [imout,ff] = readimg(fpath, ch, varargin)
                 end
 
                 if ~isempty(ff.correction) && size(ff.correction,3) >= cx
-                    img = min(max( img.*ff.correction(:,:,cx), 0), 1);
+                    img = min(max( img.*ff.correction(:,:,cx), 0), 1);;
                 else
                     ff = [];
                 end
@@ -163,10 +163,6 @@ function [ff,lastline] = loadflatfield(fd)
     %scale: [0.507653710856, 0.502936759126, 0.487795945104, 0.497057198552, 0.487979214811, 0.502659764869]
     %size: 2464, 2056
 
-    % Newer versions of scan.yaml can have parentheses for sizes
-    %modelsize: (616, 514)
-    %size: (2464, 2056)
-
     ff.modelfile = '';
     ff.modelsize = [1 1];
     ff.nL        = 6;
@@ -197,13 +193,13 @@ function [ff,lastline] = loadflatfield(fd)
         if strcmp(key,'modelfile')
             ff.modelfile = value;
         elseif strcmp(key,'modelsize')
-            ff.modelsize = str2num(regexprep(value,'[\(\)]',' '));
+            ff.modelsize = str2num(value);
         elseif strcmp(key,'nL')
             ff.nL = str2num(value);
         elseif strcmp(key,'scale')
             ff.scale = str2num(value);
         elseif strcmp(key,'size')
-            ff.size = str2num(regexprep(value,'[\(\)]',' '));
+            ff.size = str2num(value);
         end
         
         line = fgetl(fd);

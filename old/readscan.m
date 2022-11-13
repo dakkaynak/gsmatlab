@@ -98,7 +98,9 @@ function sdata = readscan(fpath)
     if sdata.version >= 2
         [scandr,scanfile,scanext] = fileparts(fpath);
         scancontext = fullfile(scandr, 'Analysis/scancontext.yaml');
-        if exist(scancontext, 'file')
+        if ~exist(scancontext, 'file')
+            fprintf('no annotations %s\n',scancontext);
+        else
             sdata.annotations = loadshapesasannotations(scancontext);
         end
     end 
@@ -428,9 +430,6 @@ end
 % find calibration file
 %
 function cpath = findcalib(fpath, value)
-
-% DAY edit Nov 13, 2022
-    value = strrep( value,'\',filesep);
 
     [scandr,scanfile] = fileparts(fpath);
     [setdr,scannm]    = fileparts(scandr);

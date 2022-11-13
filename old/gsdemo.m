@@ -1,9 +1,8 @@
 %GSDEMO Simple demo script showing how to plot a profile from a GelSight scan.
 %
-% Commented by DAY Nov 13, 2022
 %[parentdr,filenm] = fileparts(mfilename('fullpath'));
+parentdr = '.';
 
-parentdr = '/Users/deryaakkaynak/Documents/Research_Local/Github/GelSight/gsmatlab/';
 spath = fullfile(parentdr,'demo','groove','scan.yaml');
 if ~exist(spath,'file')
     error('cannot find scan file for demo %s',spath);
